@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "447172026219",
+    "project_id": "om-hack-hms",
+    "storage_bucket": "om-hack-hms.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:447172026219:android:3491778a56082362e3f62e",
+        "android_client_info": {
+          "package_name": "com.example.hospital_manage_system"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBtPT8j10pmBzUueBg0O7ePrl63YKpH-mU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
