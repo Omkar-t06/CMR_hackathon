@@ -1,10 +1,9 @@
-import 'dart:math';
+// ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hospital_manage_system/utils/app_colors.dart';
 import 'package:hospital_manage_system/utils/textfeild_styles.dart';
-import 'package:hospital_manage_system/utils/utils.dart';
 import 'package:string_validator/string_validator.dart';
 
 class LoginPage extends StatefulWidget {
@@ -18,27 +17,29 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
-  final formKey = GlobalKey<FormState>();
+  final formkey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    void loginUser() {
+      if (formkey.currentState != null && formkey.currentState!.validate()) {
+        print(_emailController.text);
+        print(_passController.text);
+
+        Navigator.pushReplacementNamed(context, '/home',
+            arguments: _emailController.text);
+        print('login successful!');
+      } else {
+        print('not successful!');
+      }
+    }
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: SizedBox.fromSize(
         size: MediaQuery.sizeOf(context),
         child: Stack(
           children: [
-            Positioned(
-              left: 80,
-              top: 300,
-              child: Transform.rotate(
-                angle: -pi * 0.05,
-                child: Image.asset(
-                  'assets/png/health-care.png',
-                  width: 50,
-                ),
-              ),
-            ),
             Positioned(
               left: -50,
               top: 10,
@@ -59,7 +60,7 @@ class _LoginPageState extends State<LoginPage> {
                   color: AppColors.whiteColor.withOpacity(.8),
                 ),
                 child: Form(
-                  key: formKey,
+                  key: formkey,
                   child: Column(
                     // padding: const EdgeInsets.symmetric(horizontal: 50),
                     children: [
@@ -78,9 +79,10 @@ class _LoginPageState extends State<LoginPage> {
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Enter you e-mail.";
-                          } else if (!isEmail(value)) {
-                            return "Invalid mail";
                           }
+                          // } else if (!isEmail(value)) {
+                          //   return "Invalid mail";
+                          // }
                           return null;
                         },
                         controller: _emailController,
@@ -117,14 +119,8 @@ class _LoginPageState extends State<LoginPage> {
                               backgroundColor: AppColors.primaryColor,
                               foregroundColor: AppColors.whiteColor,
                             ),
-                            onPressed: () async {
-                              loadingDialog(context);
-                              FocusManager.instance.primaryFocus?.unfocus();
-                              Future.delayed(const Duration(seconds: 2)).then(
-                                (value) => Navigator.pop(context),
-                              );
-                            },
-                            child: const Text("Sign In")),
+                            onPressed: loginUser,
+                            child: const Text("Log In")),
                       ),
                       const SizedBox(
                         height: 15,

@@ -1,7 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hospital_manage_system/services/auth_services.dart';
 import 'package:hospital_manage_system/utils/app_colors.dart';
 import 'package:hospital_manage_system/utils/textfeild_styles.dart';
 import 'package:string_validator/string_validator.dart';
@@ -16,7 +19,6 @@ class RegistrationPage extends StatefulWidget {
 class _RegistrationPageState extends State<RegistrationPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
-  final TextEditingController _nameController = TextEditingController();
   final fKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -92,22 +94,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       const SizedBox(
                         height: 10,
                       ),
-                      TextFormField(
-                        controller: _nameController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Enter your name";
-                          } else if (value.length < 4) {
-                            return "Name must have at least 4 chars";
-                          }
-                          return null;
-                        },
-                        style: textFieldTextStyle(),
-                        decoration: textFieldDecoration('Full Name'),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -126,20 +112,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                 style: textFieldTextStyle(),
                                 decoration: textFieldDecoration('Password')),
                           ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: TextFormField(
-                              obscureText: true,
-                              validator: (value) {
-                                if (value != _passController.text) {
-                                  return "Password did'nt matched";
-                                }
-                                return null;
-                              },
-                              style: textFieldTextStyle(),
-                              decoration: textFieldDecoration('Re-Password'),
-                            ),
-                          ),
                         ],
                       ),
                       const SizedBox(
@@ -153,10 +125,19 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             foregroundColor: AppColors.whiteColor,
                           ),
                           onPressed: () async {
-                            FocusManager.instance.primaryFocus?.unfocus();
-                            widget.controller.animateToPage(2,
-                                duration: const Duration(milliseconds: 500),
-                                curve: Curves.ease);
+                            if (fKey.currentState != null &&
+                                fKey.currentState!.validate()) {
+                              final email = _emailController.text;
+                              final password = _passController.text;
+                              await AuthService.firebase()
+                                  .createUser(email: email, password: password);
+                              await AuthService.firebase()
+                                  .sendVerificationEmail();
+                              FocusManager.instance.primaryFocus?.unfocus();
+                              widget.controller.animateToPage(2,
+                                  duration: const Duration(milliseconds: 500),
+                                  curve: Curves.ease);
+                            }
                           },
                           child: const Text("Create account"),
                         ),
