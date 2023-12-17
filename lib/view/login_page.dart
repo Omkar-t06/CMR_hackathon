@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hospital_manage_system/utils/app_colors.dart';
 import 'package:hospital_manage_system/utils/textfeild_styles.dart';
-import 'package:string_validator/string_validator.dart';
 
 class LoginPage extends StatefulWidget {
   final PageController controller;
