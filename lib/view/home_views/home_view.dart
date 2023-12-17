@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hospital_manage_system/utils/app_colors.dart';
+import 'package:hospital_manage_system/view/home_views/contact_view.dart';
+import 'package:hospital_manage_system/view/home_views/fill_form_view.dart';
+import 'package:hospital_manage_system/view/home_views/pofile_view.dart';
 import 'package:hospital_manage_system/view/widget/menu_grid.dart';
 import 'package:hospital_manage_system/view/widget/scrolling_banner.dart';
 import 'package:hospital_manage_system/view/widget/search_box.dart';
@@ -49,7 +52,7 @@ class HomeView extends StatelessWidget {
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   )),
-              const MenuGrid(),
+              const MenuGrid()
             ],
           ),
         ),
@@ -72,6 +75,28 @@ class HomeView extends StatelessWidget {
                 label: 'Profile',
                 backgroundColor: AppColors.secondaryColorLight),
           ],
+          onTap: (int index) {
+            switch (index) {
+              case 0:
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const HomeView()));
+                break;
+              case 1:
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const FillForm()));
+                break;
+              case 2:
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const ContactUs()));
+                break;
+              case 3:
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const Profileview()));
+                break;
+            }
+          },
         ));
   }
 }
