@@ -83,7 +83,7 @@ class HomeView extends StatelessWidget {
                 break;
               case 1:
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const FillForm()));
+                    MaterialPageRoute(builder: (context) =>  PatientRegistrationForm()));
                 break;
               case 2:
                 Navigator.push(context,
