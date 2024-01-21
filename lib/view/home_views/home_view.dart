@@ -57,6 +57,7 @@ class HomeView extends StatelessWidget {
           ),
         ),
         bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: AppColors.secondaryColorLight,
           items: [
             BottomNavigationBarItem(
                 icon: const Icon(Icons.home_outlined),
@@ -78,8 +79,8 @@ class HomeView extends StatelessWidget {
           onTap: (int index) {
             switch (index) {
               case 0:
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const HomeView()));
+                Navigator.pushReplacementNamed(context, '/home',
+                    arguments: user);
                 break;
               case 1:
                 Navigator.push(context,
@@ -91,9 +92,11 @@ class HomeView extends StatelessWidget {
                 break;
               case 3:
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const Profileview()));
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const Profileview(),
+                  ),
+                );
                 break;
             }
           },
