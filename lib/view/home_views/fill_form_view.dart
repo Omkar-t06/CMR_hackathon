@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class PatientRegistrationForm extends StatefulWidget {
   const PatientRegistrationForm({super.key});
@@ -14,6 +17,16 @@ class _PatientRegistrationFormState extends State<PatientRegistrationForm> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _ageController = TextEditingController();
   final TextEditingController _genderController = TextEditingController();
+  File? _selectedImage;
+
+  Future _pickImageFromGallery() async {
+    final returnedImage =
+        await ImagePicker().pickImage(source: ImageSource.camera);
+    if (returnedImage == null) return;
+    setState(() {
+      _selectedImage = returnedImage as File?;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,6 +84,11 @@ class _PatientRegistrationFormState extends State<PatientRegistrationForm> {
                 },
                 child: const Text('Submit'),
               ),
+              const SizedBox(
+                height: 16.0,
+              ),
+              ElevatedButton(
+                  onPressed: () {}, child: const Text("Upload Image")),
             ],
           ),
         ),

@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:hospital_manage_system/utils/app_colors.dart';
 import 'package:hospital_manage_system/view/home_views/contact_view.dart';
@@ -7,96 +9,138 @@ import 'package:hospital_manage_system/view/widget/menu_grid.dart';
 import 'package:hospital_manage_system/view/widget/scrolling_banner.dart';
 import 'package:hospital_manage_system/view/widget/search_box.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
   @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  int _selectedIndex = 0;
+  late String? user;
+  late List<Widget> _pageOptions;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // Initialize user from route arguments
+    user = ModalRoute.of(context)!.settings.arguments as String?;
+
+    // Initialize _pageOptions after user is available
+    _pageOptions = <Widget>[
+      HomeScreen(user: user),
+      const PatientRegistrationForm(),
+      const ContactUs(),
+      const Profileview(),
+    ];
+  }
+
+  void _onItemTap(int index) {
+    setState(() {
+      //Initializing indexes
+      _selectedIndex = index;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final String? user = ModalRoute.of(context)!.settings.arguments as String?;
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          title: Text("Hey $user"),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/');
-                },
-                icon: const Icon(Icons.logout))
-          ],
-        ),
-        body: SizedBox.fromSize(
-          size: MediaQuery.sizeOf(context),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  const Expanded(
-                    child: Searchbar(),
-                  ),
-                  CircleAvatar(
-                      radius: 30,
-                      backgroundColor: Colors.grey[200],
-                      child: IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.message_rounded)))
-                ],
-              ),
-              const Text("What's News",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              const ScrollingBanner(),
-              const Text("How can we help you?",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  )),
-              const MenuGrid()
-            ],
+      body: _pageOptions[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.home),
+            label: 'Home',
+            backgroundColor: AppColors.secondaryColorLight,
           ),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: [
-            BottomNavigationBarItem(
-                icon: const Icon(Icons.home_outlined),
-                label: 'Home',
-                backgroundColor: AppColors.secondaryColor),
-            BottomNavigationBarItem(
-                icon: const Icon(Icons.app_registration_rounded),
-                label: 'Fill Form',
-                backgroundColor: AppColors.secondaryColorLight),
-            BottomNavigationBarItem(
-                icon: const Icon(Icons.phone_in_talk),
-                label: 'Contact',
-                backgroundColor: AppColors.secondaryColor),
-            BottomNavigationBarItem(
-                icon: const Icon(Icons.person_outline),
-                label: 'Profile',
-                backgroundColor: AppColors.secondaryColorLight),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.add),
+            label: 'Appointment',
+            backgroundColor: AppColors.secondaryColorLight,
+          ),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.contact_page),
+            label: 'Contact Us',
+            backgroundColor: AppColors.secondaryColorLight,
+          ),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.person),
+            label: 'Profile',
+            backgroundColor: AppColors.secondaryColorLight,
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: AppColors.primaryColor,
+        onTap: _onItemTap,
+      ),
+    );
+  }
+}
+
+class HomeScreen extends StatefulWidget {
+  String? user;
+  HomeScreen({super.key, this.user});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  String? user;
+
+  @override
+  void initState() {
+    user = widget.user;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: Text("Hey $user"),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/');
+              },
+              icon: const Icon(Icons.logout))
+        ],
+      ),
+      body: SizedBox.fromSize(
+        size: MediaQuery.sizeOf(context),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                const Expanded(
+                  child: Searchbar(),
+                ),
+                CircleAvatar(
+                    radius: 30,
+                    backgroundColor: Colors.grey[200],
+                    child: IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.message_rounded)))
+              ],
+            ),
+            const Text("What's News",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const ScrollingBanner(),
+            const Text("How can we help you?",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                )),
+            const MenuGrid()
           ],
-          onTap: (int index) {
-            switch (index) {
-              case 0:
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const HomeView()));
-                break;
-              case 1:
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) =>  PatientRegistrationForm()));
-                break;
-              case 2:
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const ContactUs()));
-                break;
-              case 3:
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const Profileview()));
-                break;
-            }
-          },
-        ));
+        ),
+      ),
+    );
   }
 }
